@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Mittauksen tulokset";
+}
+
+<h2>Mittauksen tulokset</h2>
+
+<table class="table" id="tulos">
+    <tr>
+        <th>Object</th>
+        <th>Tag</th>
+        <th>Timestamp</th>
+    </tr>
+
+</table>
+
+<h3>Graafi</h3>
+
+<canvas id="graphCanvas" width="500" height="500"></canvas>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    
+    <script>
+        var dataUrl = '@Url.Content("~/api/SearchData")';
+
+        $(function () {
+            $.getJSON(dataUrl, function (data) {
+                var text = '';
+                $.each(data, function (key, val) {
+                    text = "<tr>" +
+                            "<td>" + data[key].object + "</td>" +
+                            "<td>" + data[key].tag + "</td>" +
+                            "<td>" + data[key].timestampISO8601 + "</td>" +
+                        "</tr>";
+                    $("#tulos").append(text);
+                    console.log(text);
+                });
+            });
+        });
+
+        $(function () {
+            $.getJSON(dataUrl, function (data) {
+                console.log(JSON.stringify(data));
+
+                var graph = document.getElementById("graphCanvas").getContext('2d');
+
+                data = data.reverse();
+
+                var charData = [];
+
+                var chartLabels = [];
+                var firstMeasurement = data[0];
+                var dataSetLabel = firstMeasurement.data[0].tag;
+                $('#measDate').html(new Date(firstMeasurement.timestampISO8601).toLocaleDateString());
+                $.each(data, function (index, item) {
+                    chartLabels.push(new Date(item.timestampISO8601).toLocaleDateString());
+                    charData.push(item.data[0].value);
+                });
+
+                var myLineChart = new Chart(graph, {
+                    type: 'line',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [
+                            {
+                                label: dataSetLabel,
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: charData
+                            }
+                        ]
+                    }
+                });
+
+
+            });
+        });
+    </script>
+}
+

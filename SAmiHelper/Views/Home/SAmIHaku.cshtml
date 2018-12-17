@@ -1,0 +1,31 @@
+﻿@model SearchModel
+
+@{
+    ViewData["Title"] = "SAmIHaku";
+}
+
+<h2>Hae tietoa SaMi-palvelusta</h2>
+
+<form asp-action="Search" method="post">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Key">Key</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line password" asp-for="Key" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Key" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                @*lisätään hidden-kenttä, jossa välitetään määritelty "vakio"arvo From (päivämäärälle)*@
+                <input asp-for="From" type="hidden" />
+
+                <input type="submit" class="btn btn-outline-primary" value="Hae sensorit" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@Html.Partial("_KeyPartial")
+

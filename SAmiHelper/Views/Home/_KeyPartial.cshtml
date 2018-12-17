@@ -1,0 +1,13 @@
+﻿@inject SearchCounter search
+
+    
+<h3>Tehdyt haut</h3>
+
+@if(null == search)
+{
+    
+    <p>Hakuja tehty @search.SearchCount verran</p>
+    <p>Viimeisin haku tehty @search.SearchTime</p>
+}
+
+    
